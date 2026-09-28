@@ -1,4 +1,5 @@
 .claude/
+/design/
 *.log
 .DS_Store
 .env

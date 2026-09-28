@@ -1,0 +1,64 @@
+// All GreenDot design tokens as CSS custom properties.
+// Dark theme is the default. Light theme activates via <html data-theme="light">.
+// These are CSS custom properties (not SCSS variables) so the browser can
+// switch themes at runtime without a page reload.
+
+:root {
+    // Backgrounds
+    --gd-bg:        #0C0E11; // page background
+    --gd-surface:   #15181D; // cards, panels
+    --gd-surface-2: #1D2127; // inputs, chips, currently-playing block
+
+    // Borders & structure
+    --gd-line: #272C34;
+
+    // Text
+    --gd-text:  #EDEFF2;
+    --gd-muted: #A0A7B2;
+    --gd-off:   #3A404A; // empty radios, inactive toggles
+    --gd-idle:  #5E6672;
+
+    // Green – the brand accent. Use sparingly (see CLAUDE.md)
+    --gd-dot:        #3DE27F; // the green dot itself
+    --gd-glow:       0 0 10px rgba(61, 226, 127, .75);
+    --gd-green:      #3DE27F; // primary button fill
+    --gd-green-ink:  #04200F; // text on green backgrounds
+    --gd-green-text: #5BEA93; // green text on dark backgrounds
+    --gd-green-soft: rgba(61, 226, 127, .12);
+    --gd-green-line: rgba(61, 226, 127, .40);
+
+    // Amber – trophy rarity only
+    --gd-amber:      #F0B35A;
+    --gd-amber-soft: rgba(240, 179, 90, .14);
+
+    // Misc
+    --gd-bar:    #6B7380; // hours bars
+    --gd-shadow: 0 14px 30px rgba(0, 0, 0, .28);
+    --gd-page:   radial-gradient(1100px 520px at 12% -8%, rgba(61, 226, 127, .08), transparent 62%), #0C0E11;
+}
+
+[data-theme="light"] {
+    --gd-bg:        #F3F2EE;
+    --gd-surface:   #FFFFFF;
+    --gd-surface-2: #EFEEE9;
+    --gd-line:      #DEDCD5;
+    --gd-text:      #15171A;
+    --gd-muted:     #555C66;
+    --gd-off:       #C9C7C0;
+    --gd-idle:      #A3A8B0;
+
+    --gd-dot:        #18A84F;
+    --gd-glow:       0 0 8px rgba(24, 168, 79, .5);
+    --gd-green:      #3DE27F; // unchanged – same green button in both themes
+    --gd-green-ink:  #04200F; // unchanged
+    --gd-green-text: #0E7A37;
+    --gd-green-soft: rgba(24, 168, 79, .12);
+    --gd-green-line: rgba(14, 122, 55, .40);
+
+    --gd-amber:      #8A560C;
+    --gd-amber-soft: rgba(214, 146, 40, .16);
+
+    --gd-bar:    #A3A8B0;
+    --gd-shadow: 0 10px 24px rgba(20, 22, 26, .06);
+    --gd-page:   radial-gradient(1100px 520px at 12% -8%, rgba(31, 193, 102, .10), transparent 62%), #F3F2EE;
+}
