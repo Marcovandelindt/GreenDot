@@ -1,5 +1,7 @@
 @use 'variables' as *;
 
+@layer utilities {
+
 @keyframes gd-pulse {
     0%, 100% { opacity: 1; }
     50%       { opacity: .55; }
@@ -40,3 +42,5 @@
         animation: none;
     }
 }
+
+} // end @layer utilities
