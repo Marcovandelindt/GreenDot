@@ -2,31 +2,115 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $fillable = [
+        'psn_id',
+        'email',
+        'password',
+        'bio',
+        'country',
+        'region',
+        'accepts_all_requests',
+        'verified',
+        'last_active_at',
+        'current_game_id',
+    ];
+
+    protected $hidden = ['password', 'remember_token'];
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at'    => 'datetime',
+            'last_active_at'       => 'datetime',
+            'accepts_all_requests' => 'boolean',
+            'verified'             => 'boolean',
+            'password'             => 'hashed',
         ];
+    }
+
+    public function currentGame(): BelongsTo
+    {
+        return $this->belongsTo(Game::class, 'current_game_id');
+    }
+
+    public function languages(): BelongsToMany
+    {
+        return $this->belongsToMany(Language::class, 'language_user');
+    }
+
+    public function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_user')
+            ->withPivot(['hours', 'is_favorite', 'favorite_position'])
+            ->orderByPivot('hours', 'desc');
+    }
+
+    public function favoriteGames(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_user')
+            ->wherePivot('is_favorite', true)
+            ->withPivot(['hours', 'is_favorite', 'favorite_position'])
+            ->orderByPivot('favorite_position');
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function pinnedPosts(): HasMany
+    {
+        return $this->hasMany(Post::class)
+            ->whereNotNull('pinned_position')
+            ->orderBy('pinned_position');
+    }
+
+    public function addedPlayers(): HasMany
+    {
+        return $this->hasMany(AddedPlayer::class);
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class, 'reported_user_id');
+    }
+
+    public function isRecentlyActive(): bool
+    {
+        return $this->last_active_at?->gt(Carbon::now()->subMinutes(30)) ?? false;
+    }
+
+    public function activityLabel(): string
+    {
+        if ($this->last_active_at === null) {
+            return '';
+        }
+
+        $minutes = (int) $this->last_active_at->diffInMinutes(now());
+
+        return match(true) {
+            $minutes <= 5   => 'Online now',
+            $minutes <= 30  => "Active {$minutes} min ago",
+            $minutes <= 90  => 'Active ' . (int) ($minutes / 60) . ' h ago',
+            $minutes < 1440 => 'Active ' . (int) ($minutes / 60) . ' h ago',
+            $minutes < 2880 => 'Active yesterday',
+            default         => 'Active ' . (int) ($minutes / 1440) . ' d ago',
+        };
+    }
+
+    public function initials(): string
+    {
+        return strtoupper(substr($this->psn_id, 0, 2));
     }
 }
