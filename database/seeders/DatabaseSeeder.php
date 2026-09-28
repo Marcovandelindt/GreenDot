@@ -24,19 +24,19 @@ class DatabaseSeeder extends Seeder
     private function seedGames(): array
     {
         $rows = [
-            ['key' => 'hd2',      'title' => 'Helldivers 2',              'release_year' => 2024, 'placeholder_color_1' => '#E9B73A', 'placeholder_color_2' => '#2A2210'],
-            ['key' => 'er',       'title' => 'Elden Ring',                'release_year' => 2022, 'placeholder_color_1' => '#B8975A', 'placeholder_color_2' => '#16130D'],
-            ['key' => 'gt7',      'title' => 'Gran Turismo 7',            'release_year' => 2022, 'placeholder_color_1' => '#D9463C', 'placeholder_color_2' => '#1E0D0C'],
-            ['key' => 'astro',    'title' => 'Astro Bot',                 'release_year' => 2024, 'placeholder_color_1' => '#8FD3F2', 'placeholder_color_2' => '#23407A'],
-            ['key' => 'fc',       'title' => 'EA Sports FC 26',           'release_year' => 2025, 'placeholder_color_1' => '#D8D2C6', 'placeholder_color_2' => '#262532'],
-            ['key' => 'cod',      'title' => 'Call of Duty: Black Ops 6', 'release_year' => 2024, 'placeholder_color_1' => '#E0662A', 'placeholder_color_2' => '#120B07'],
-            ['key' => 'bg3',      'title' => "Baldur's Gate 3",           'release_year' => 2023, 'placeholder_color_1' => '#A987D6', 'placeholder_color_2' => '#1B1130'],
-            ['key' => 'yotei',    'title' => 'Ghost of Yōtei',            'release_year' => 2025, 'placeholder_color_1' => '#E7D9C4', 'placeholder_color_2' => '#6B1E1E'],
-            ['key' => 'tsushima', 'title' => 'Ghost of Tsushima',         'release_year' => 2020, 'placeholder_color_1' => '#E8E1D0', 'placeholder_color_2' => '#5A1414'],
-            ['key' => 'ghostwire','title' => 'Ghostwire: Tokyo',          'release_year' => 2022, 'placeholder_color_1' => '#6FD1C9', 'placeholder_color_2' => '#1A1440'],
-            ['key' => 'recon',    'title' => 'Ghost Recon Breakpoint',    'release_year' => 2019, 'placeholder_color_1' => '#9AA6B2', 'placeholder_color_2' => '#1D252C'],
-            ['key' => 'returnal', 'title' => 'Returnal',                  'release_year' => 2021, 'placeholder_color_1' => '#E05A4F', 'placeholder_color_2' => '#0E1A24'],
-            ['key' => 'spidey',   'title' => "Marvel's Spider-Man 2",     'release_year' => 2023, 'placeholder_color_1' => '#D8363A', 'placeholder_color_2' => '#141A3A'],
+            ['key' => 'hd2',      'title' => 'Helldivers 2',              'short_title' => 'Helldivers 2',    'release_year' => 2024, 'placeholder_color_1' => '#E9B73A', 'placeholder_color_2' => '#2A2210'],
+            ['key' => 'er',       'title' => 'Elden Ring',                'short_title' => 'Elden Ring',      'release_year' => 2022, 'placeholder_color_1' => '#B8975A', 'placeholder_color_2' => '#16130D'],
+            ['key' => 'gt7',      'title' => 'Gran Turismo 7',            'short_title' => 'Gran Turismo 7',  'release_year' => 2022, 'placeholder_color_1' => '#D9463C', 'placeholder_color_2' => '#1E0D0C'],
+            ['key' => 'astro',    'title' => 'Astro Bot',                 'short_title' => 'Astro Bot',       'release_year' => 2024, 'placeholder_color_1' => '#8FD3F2', 'placeholder_color_2' => '#23407A'],
+            ['key' => 'fc',       'title' => 'EA Sports FC 26',           'short_title' => 'FC 26',           'release_year' => 2025, 'placeholder_color_1' => '#D8D2C6', 'placeholder_color_2' => '#262532'],
+            ['key' => 'cod',      'title' => 'Call of Duty: Black Ops 6', 'short_title' => 'Black Ops 6',     'release_year' => 2024, 'placeholder_color_1' => '#E0662A', 'placeholder_color_2' => '#120B07'],
+            ['key' => 'bg3',      'title' => "Baldur's Gate 3",           'short_title' => "Baldur's Gate 3", 'release_year' => 2023, 'placeholder_color_1' => '#A987D6', 'placeholder_color_2' => '#1B1130'],
+            ['key' => 'yotei',    'title' => 'Ghost of Yōtei',            'short_title' => 'Ghost of Yōtei',  'release_year' => 2025, 'placeholder_color_1' => '#E7D9C4', 'placeholder_color_2' => '#6B1E1E'],
+            ['key' => 'tsushima', 'title' => 'Ghost of Tsushima',         'short_title' => 'Ghost of Tsushima','release_year' => 2020, 'placeholder_color_1' => '#E8E1D0', 'placeholder_color_2' => '#5A1414'],
+            ['key' => 'ghostwire','title' => 'Ghostwire: Tokyo',          'short_title' => 'Ghostwire: Tokyo','release_year' => 2022, 'placeholder_color_1' => '#6FD1C9', 'placeholder_color_2' => '#1A1440'],
+            ['key' => 'recon',    'title' => 'Ghost Recon Breakpoint',    'short_title' => 'Ghost Recon',     'release_year' => 2019, 'placeholder_color_1' => '#9AA6B2', 'placeholder_color_2' => '#1D252C'],
+            ['key' => 'returnal', 'title' => 'Returnal',                  'short_title' => 'Returnal',        'release_year' => 2021, 'placeholder_color_1' => '#E05A4F', 'placeholder_color_2' => '#0E1A24'],
+            ['key' => 'spidey',   'title' => "Marvel's Spider-Man 2",     'short_title' => 'Spider-Man 2',    'release_year' => 2023, 'placeholder_color_1' => '#D8363A', 'placeholder_color_2' => '#141A3A'],
         ];
 
         $games = [];

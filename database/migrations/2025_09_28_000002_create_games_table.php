@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('short_title')->nullable(); // abbreviated display name for small covers
             $table->string('slug')->unique();
             $table->unsignedSmallInteger('release_year')->nullable();
             $table->string('cover_url')->nullable();

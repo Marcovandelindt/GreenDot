@@ -23,6 +23,10 @@
     --color-amber-soft:  var(--gd-amber-soft);
     --color-bar:         var(--gd-bar);
 
+    --shadow-card:       var(--gd-shadow);
+    --shadow-glow:       var(--gd-glow);
+    --shadow-green-cta:  0 10px 30px rgba(61, 226, 127, .25);
+
     --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
     --font-sans:    'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono:    'JetBrains Mono', ui-monospace, monospace;

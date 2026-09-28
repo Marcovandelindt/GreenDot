@@ -113,4 +113,15 @@ class User extends Authenticatable
     {
         return strtoupper(substr($this->psn_id, 0, 2));
     }
+
+    public function avatarColor(): string
+    {
+        $palette = [
+            '#2F6F5E', '#6B4E2E', '#7A3552', '#3B4F7A',
+            '#5A6B2B', '#6E5A2A', '#4A3A6E', '#7A4A2E',
+            '#3D5A7A', '#5E3D7A', '#7A3D3D', '#3D7A5E',
+        ];
+
+        return $palette[abs(crc32($this->psn_id)) % count($palette)];
+    }
 }
