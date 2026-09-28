@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationNoticeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResendVerificationEmailController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Discover\DiscoverController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +18,15 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
 });
 
-// Authenticated routes
+// Authenticated routes (email not required to be verified here)
 Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', EmailVerificationNoticeController::class)->name('verification.notice');
+    Route::post('/email/verification-notification', ResendVerificationEmailController::class)->name('verification.send')->middleware('throttle:6,1');
+    Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)->name('verification.verify')->middleware('signed');
+});
+
+// Authenticated + verified routes
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', DiscoverController::class)->name('discover');
     Route::get('/random', fn () => view('coming-soon', ['page' => 'Random']))->name('random');
     Route::get('/u/{psn_id}', fn (string $psn_id) => view('coming-soon', ['page' => 'Profile']))->name('profile.show');
