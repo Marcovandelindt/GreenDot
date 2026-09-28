@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+@import "tailwindcss";
+
+/* Map GreenDot tokens to Tailwind utility names */
+@theme inline {
+    --color-bg:          var(--gd-bg);
+    --color-surface:     var(--gd-surface);
+    --color-surface-2:   var(--gd-surface-2);
+    --color-line:        var(--gd-line);
+    --color-text:        var(--gd-text);
+    --color-muted:       var(--gd-muted);
+    --color-off:         var(--gd-off);
+    --color-idle:        var(--gd-idle);
+    --color-dot:         var(--gd-dot);
+    --color-green:       var(--gd-green);
+    --color-green-ink:   var(--gd-green-ink);
+    --color-green-text:  var(--gd-green-text);
+    --color-green-soft:  var(--gd-green-soft);
+    --color-green-line:  var(--gd-green-line);
+    --color-amber:       var(--gd-amber);
+    --color-amber-soft:  var(--gd-amber-soft);
+    --color-bar:         var(--gd-bar);
+
+    --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+    --font-sans:    'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Dark theme – default */
+:root {
+    --gd-bg:          #0C0E11;
+    --gd-surface:     #15181D;
+    --gd-surface-2:   #1D2127;
+    --gd-line:        #272C34;
+    --gd-text:        #EDEFF2;
+    --gd-muted:       #A0A7B2;
+    --gd-off:         #3A404A;
+    --gd-idle:        #5E6672;
+    --gd-dot:         #3DE27F;
+    --gd-glow:        0 0 10px rgba(61, 226, 127, .75);
+    --gd-green:       #3DE27F;
+    --gd-green-ink:   #04200F;
+    --gd-green-text:  #5BEA93;
+    --gd-green-soft:  rgba(61, 226, 127, .12);
+    --gd-green-line:  rgba(61, 226, 127, .40);
+    --gd-amber:       #F0B35A;
+    --gd-amber-soft:  rgba(240, 179, 90, .14);
+    --gd-bar:         #6B7380;
+    --gd-shadow:      0 14px 30px rgba(0, 0, 0, .28);
+    --gd-page:        radial-gradient(1100px 520px at 12% -8%, rgba(61, 226, 127, .08), transparent 62%), #0C0E11;
+}
+
+[data-theme="light"] {
+    --gd-bg:          #F3F2EE;
+    --gd-surface:     #FFFFFF;
+    --gd-surface-2:   #EFEEE9;
+    --gd-line:        #DEDCD5;
+    --gd-text:        #15171A;
+    --gd-muted:       #555C66;
+    --gd-off:         #C9C7C0;
+    --gd-idle:        #A3A8B0;
+    --gd-dot:         #18A84F;
+    --gd-glow:        0 0 8px rgba(24, 168, 79, .5);
+    --gd-green:       #3DE27F;
+    --gd-green-ink:   #04200F;
+    --gd-green-text:  #0E7A37;
+    --gd-green-soft:  rgba(24, 168, 79, .12);
+    --gd-green-line:  rgba(14, 122, 55, .40);
+    --gd-amber:       #8A560C;
+    --gd-amber-soft:  rgba(214, 146, 40, .16);
+    --gd-bar:         #A3A8B0;
+    --gd-shadow:      0 10px 24px rgba(20, 22, 26, .06);
+    --gd-page:        radial-gradient(1100px 520px at 12% -8%, rgba(31, 193, 102, .10), transparent 62%), #F3F2EE;
+}

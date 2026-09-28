@@ -15,24 +15,19 @@ html {
 }
 
 body {
-    font-family: $font-sans;
-    font-size: $font-size-base;
-    font-weight: $font-weight-normal;
-    line-height: $line-height-normal;
-    color: $color-text-primary;
-    background-color: $color-bg-dark;
+    font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--gd-text);
+    background: var(--gd-bg);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-    color: $color-accent;
+    color: inherit;
     text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
 
 img,
@@ -55,12 +50,19 @@ select {
     font-size: inherit;
 }
 
+input::placeholder,
+textarea::placeholder {
+    color: var(--gd-idle);
+}
+
 ul,
 ol {
     list-style: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: $font-weight-semibold;
-    line-height: $line-height-tight;
+    font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
 }

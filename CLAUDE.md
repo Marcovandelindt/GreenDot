@@ -7,10 +7,22 @@ GreenDot is a Laravel 13 web application for PlayStation players to discover and
 - **PHP 8.5** / Laravel 13
 - **MySQL** (production), SQLite (local dev / tests)
 - **Vite** for asset bundling
-- **SCSS** for all styling — never plain CSS, never inline styles
+- **Tailwind CSS v4** for utility classes — colors registered as `--gd-*` CSS custom properties so the dark/light theme works at runtime
+- **SCSS** (`resources/scss/`) for custom components, animations and anything that needs SCSS power
+- **Alpine.js** for client-side interactivity (copy buttons, card animations, fetching the next random player)
 - **lorisleiva/laravel-actions** for business logic
 - **IGDB API** (via Twitch credentials) for the game database
 - **Laravel Scout + Meilisearch** for search
+
+### Asset entry points
+
+| File | Purpose |
+|---|---|
+| `resources/css/app.css` | Tailwind import + `--gd-*` CSS custom properties + `@theme inline` mappings |
+| `resources/scss/app.scss` | SCSS entry — imports `_variables`, `_base`, `_animations` and component partials |
+| `resources/js/app.js` | Alpine.js initialisation |
+
+All three are loaded via `@vite` in the base layout.
 
 ## Commands
 

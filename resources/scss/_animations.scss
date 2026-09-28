@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+@keyframes gd-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .55; }
+}
+
+@keyframes gd-card-in {
+    from {
+        transform: translateX(56px) rotate(4deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes gd-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.gd-pulse {
+    animation: gd-pulse 2.6s ease-in-out infinite;
+}
+
+.gd-card-in {
+    animation: gd-card-in 320ms ease forwards;
+}
+
+.gd-fade-in {
+    animation: gd-fade-in 200ms ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gd-pulse,
+    .gd-card-in,
+    .gd-fade-in {
+        animation: none;
+    }
+}
