@@ -21,8 +21,8 @@ Route::middleware('guest')->group(function () {
 // Authenticated routes (email not required to be verified here)
 Route::middleware('auth')->group(function () {
     Route::get('/email/verify', EmailVerificationNoticeController::class)->name('verification.notice');
+    Route::post('/email/verify', VerifyEmailController::class)->name('verification.verify');
     Route::post('/email/verification-notification', ResendVerificationEmailController::class)->name('verification.send')->middleware('throttle:6,1');
-    Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)->name('verification.verify')->middleware('signed');
 });
 
 // Authenticated + verified routes

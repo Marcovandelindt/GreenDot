@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Auth\SendVerificationCodeAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ResendVerificationEmailController extends Controller
             return redirect()->route('discover');
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        SendVerificationCodeAction::run($request->user());
 
         return redirect()->back()->with('status', 'verification-link-sent');
     }

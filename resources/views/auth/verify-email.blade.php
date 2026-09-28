@@ -10,30 +10,57 @@
 
             <h1 class="font-display font-extrabold text-[28px] tracking-[-0.03em]">Check your inbox</h1>
             <p class="text-[15px] text-muted mt-2 mb-6 leading-relaxed">
-                We sent a verification link to <strong class="text-text font-semibold">{{ auth()->user()->email }}</strong>.
-                Click the link to activate your account.
+                We sent a 6-digit code to <strong class="text-text font-semibold">{{ auth()->user()->email }}</strong>.
+                Enter it below to activate your account.
             </p>
 
             @if (session('status') === 'verification-link-sent')
                 <div class="flex items-center gap-2 px-4 py-3 rounded-[12px] bg-green-soft text-green-text text-[14px] font-semibold mb-5">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
-                    A new link has been sent.
+                    A new code has been sent.
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('verification.send') }}">
+            <form method="POST" action="{{ route('verification.verify') }}">
                 @csrf
+
+                <div class="mb-4">
+                    <input
+                        type="text"
+                        name="code"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        maxlength="6"
+                        placeholder="000000"
+                        autofocus
+                        value="{{ old('code') }}"
+                        class="w-full h-[56px] bg-surface border border-line rounded-[14px] px-4 text-center font-mono text-[24px] tracking-[0.25em] text-text placeholder-muted focus:outline-none focus:border-green transition-colors @error('code') border-red-500 @enderror"
+                    >
+                    @error('code')
+                        <p class="text-[13px] text-red-400 mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <button type="submit" class="w-full h-[48px] bg-green text-green-ink rounded-[14px] font-semibold text-[15px] cursor-pointer border-0">
-                    Resend verification email
+                    Verify email
                 </button>
             </form>
 
-            <form method="POST" action="{{ route('logout') }}" class="mt-4">
-                @csrf
-                <button type="submit" class="w-full h-[44px] bg-transparent border border-line text-muted rounded-[14px] font-semibold text-[14px] cursor-pointer hover:text-text hover:border-text transition-colors">
-                    Sign out
-                </button>
-            </form>
+            <div class="flex items-center gap-3 mt-8">
+                <form method="POST" action="{{ route('verification.send') }}" class="flex-1">
+                    @csrf
+                    <button type="submit" class="w-full h-[44px] bg-transparent border border-line text-muted rounded-[14px] font-semibold text-[14px] cursor-pointer hover:text-text hover:border-text transition-colors">
+                        Resend code
+                    </button>
+                </form>
+
+                <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                    @csrf
+                    <button type="submit" class="w-full h-[44px] bg-transparent border border-line text-muted rounded-[14px] font-semibold text-[14px] cursor-pointer hover:text-text hover:border-text transition-colors">
+                        Sign out
+                    </button>
+                </form>
+            </div>
 
         </div>
     </div>

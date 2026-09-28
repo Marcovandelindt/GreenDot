@@ -3,7 +3,6 @@
 namespace App\Actions\Auth;
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -21,7 +20,7 @@ class RegisterAction
 
         Auth::login($user);
 
-        event(new Registered($user));
+        SendVerificationCodeAction::run($user);
 
         return $user;
     }

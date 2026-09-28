@@ -25,18 +25,21 @@ class User extends Authenticatable implements MustVerifyEmail
         'verified',
         'last_active_at',
         'current_game_id',
+        'email_verification_code',
+        'email_verification_expires_at',
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'email_verification_code'];
 
     protected function casts(): array
     {
         return [
-            'email_verified_at'    => 'datetime',
-            'last_active_at'       => 'datetime',
-            'accepts_all_requests' => 'boolean',
-            'verified'             => 'boolean',
-            'password'             => 'hashed',
+            'email_verified_at'             => 'datetime',
+            'email_verification_expires_at' => 'datetime',
+            'last_active_at'                => 'datetime',
+            'accepts_all_requests'          => 'boolean',
+            'verified'                      => 'boolean',
+            'password'                      => 'hashed',
         ];
     }
 
