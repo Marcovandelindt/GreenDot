@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResendVerificationEmailController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Discover\DiscoverController;
+use App\Http\Controllers\Games\GameSearchController;
+use App\Http\Controllers\Onboarding\OnboardingController;
 use Illuminate\Support\Facades\Route;
 
 // Guest-only routes
@@ -30,7 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', DiscoverController::class)->name('discover');
     Route::get('/random', fn () => view('coming-soon', ['page' => 'Random']))->name('random');
     Route::get('/u/{psn_id}', fn (string $psn_id) => view('coming-soon', ['page' => 'Profile']))->name('profile.show');
-    Route::get('/onboarding', fn () => view('coming-soon', ['page' => 'Onboarding']))->name('profile.edit');
+    Route::get('/onboarding', [OnboardingController::class, 'create'])->name('profile.edit');
+    Route::post('/onboarding', [OnboardingController::class, 'store']);
+    Route::get('/games/search', GameSearchController::class)->name('games.search');
 });
 
 // Logout (auth not required as a guard — Laravel handles gracefully)
