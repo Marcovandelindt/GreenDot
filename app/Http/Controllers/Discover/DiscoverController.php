@@ -26,13 +26,13 @@ class DiscoverController extends Controller
                 'accepts_all_requests' => $u->accepts_all_requests,
                 'verified'             => $u->verified,
                 'current_game'         => $u->currentGame ? [
-                    'title'    => $u->currentGame->title,
-                    'gradient' => $u->currentGame->placeholderGradient(),
+                    'title'       => $u->currentGame->title,
+                    'cover_style' => $u->currentGame->coverStyle(),
                 ] : null,
                 'favorite_games'       => $u->favoriteGames->take(3)->map(fn($g) => [
                     'title'       => $g->title,
                     'short_title' => strtoupper($g->short_title ?? $g->title),
-                    'gradient'    => $g->placeholderGradient(),
+                    'cover_style' => $g->coverStyle(),
                 ])->values()->all(),
                 'game_titles'          => $u->games->pluck('title')
                     ->merge($u->currentGame ? [$u->currentGame->title] : [])

@@ -103,7 +103,7 @@
         <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line" aria-label="Currently playing">
             <div class="flex items-center gap-4 p-4 rounded-[18px] bg-surface border border-line max-w-sm">
                 <div class="flex-shrink-0 w-[52px] h-[52px] rounded-[10px]"
-                     style="background: {{ $user->currentGame->placeholderGradient() }}"></div>
+                     style="{{ $user->currentGame->coverStyle() }}"></div>
                 <div class="flex flex-col gap-[4px] min-w-0">
                     <span class="flex items-center gap-[6px] text-[11px] font-bold tracking-[.08em] uppercase text-green-text">
                         <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
@@ -122,7 +122,7 @@
             <div class="flex gap-3 lg:gap-4">
                 @foreach($user->favoriteGames->take(5) as $game)
                     <div class="w-[90px] lg:w-[110px] aspect-[3/4] rounded-[12px] lg:rounded-[14px] flex items-end p-[10px] flex-shrink-0 [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
-                         style="background: {{ $game->placeholderGradient() }}"
+                         style="{{ $game->coverStyle() }}"
                          title="{{ $game->title }}">
                         <span class="font-display font-extrabold text-[11px] lg:text-[12px] leading-[1.05] tracking-[.02em] text-white [text-shadow:0_1px_6px_rgba(0,0,0,.55)]">
                             {{ strtoupper($game->short_title ?? $game->title) }}
@@ -144,7 +144,7 @@
                 @foreach($user->games as $game)
                     <div class="flex items-center gap-3 p-3 lg:p-[14px] rounded-[14px] bg-surface border border-line">
                         <div class="flex-shrink-0 w-10 h-10 lg:w-11 lg:h-11 rounded-[8px]"
-                             style="background: {{ $game->placeholderGradient() }}"></div>
+                             style="{{ $game->coverStyle() }}"></div>
                         <div class="min-w-0 flex-grow">
                             <span class="block text-[14px] lg:text-[15px] font-semibold truncate">{{ $game->title }}</span>
                         </div>

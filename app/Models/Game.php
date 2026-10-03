@@ -47,4 +47,13 @@ class Game extends Model
 
         return "linear-gradient(160deg, {$c1} 0%, {$c2} 100%)";
     }
+
+    public function coverStyle(): string
+    {
+        if ($this->cover_url) {
+            return "background: url('{$this->cover_url}') center/cover no-repeat";
+        }
+
+        return "background: {$this->placeholderGradient()}";
+    }
 }

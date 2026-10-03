@@ -238,7 +238,7 @@ function discoverPage(players) {
                 {{-- Currently playing --}}
                 <div class="flex items-center gap-3 p-[10px] rounded-[14px] bg-surface-2" x-show="player.current_game">
                     <div class="flex-shrink-0 w-11 h-11 rounded-[8px]"
-                         :style="`background: ${player.current_game?.gradient}`"></div>
+                         :style="player.current_game?.cover_style"></div>
                     <div class="flex flex-col gap-[3px] min-w-0">
                         <span class="flex items-center gap-[6px] text-[11px] font-bold tracking-[.08em] uppercase text-green-text">
                             <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
@@ -254,7 +254,7 @@ function discoverPage(players) {
                     <div class="grid grid-cols-3 gap-2">
                         <template x-for="game in player.favorite_games.slice(0, 3)" :key="game.title">
                             <div class="aspect-[3/4] rounded-[10px] flex items-end p-2 [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
-                                 :style="`background: ${game.gradient}`"
+                                 :style="game.cover_style"
                                  :title="game.title">
                                 <span class="font-display font-extrabold text-[11px] leading-[1.05] tracking-[.02em] text-white [text-shadow:0_1px_6px_rgba(0,0,0,.55)]"
                                       x-text="game.short_title"></span>
