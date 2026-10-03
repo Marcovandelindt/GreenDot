@@ -21,7 +21,7 @@ class GameSearchController extends Controller
             ->orWhere('short_title', 'like', "%{$q}%")
             ->orderBy('title')
             ->limit(8)
-            ->get(['id', 'title', 'short_title', 'cover_url', 'placeholder_color_1', 'placeholder_color_2']);
+            ->get(['id', 'slug', 'title', 'short_title', 'cover_url', 'placeholder_color_1', 'placeholder_color_2']);
 
         return response()->json($games);
     }

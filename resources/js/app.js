@@ -1,5 +1,68 @@
 import Alpine from 'alpinejs';
 
+Alpine.data('discoverPage', () => {
+    const players = window.__discoverData || [];
+
+    return {
+        players,
+        query: '',
+        lang: 'All',
+        region: 'All regions',
+        copied: null,
+        gameResults: [],
+        showDropdown: false,
+
+        async fetchGames(q) {
+            if (q.trim().length < 2) {
+                this.gameResults = [];
+                this.showDropdown = false;
+                return;
+            }
+            try {
+                const res = await fetch(`/games/search?q=${encodeURIComponent(q)}`);
+                this.gameResults = await res.json();
+                this.showDropdown = this.gameResults.length > 0;
+            } catch {
+                this.gameResults = [];
+                this.showDropdown = false;
+            }
+        },
+
+        coverStyle(game) {
+            if (game.cover_url) return `background: url('${game.cover_url}') center/cover no-repeat`;
+            const c1 = game.placeholder_color_1 || '#1a1a2e';
+            const c2 = game.placeholder_color_2 || '#16213e';
+            return `background: linear-gradient(160deg, ${c1} 0%, ${c2} 100%)`;
+        },
+
+        get filteredPlayers() {
+            const q = this.query.trim().toLowerCase();
+            return this.players.filter(p => {
+                if (this.lang !== 'All' && !p.languages.includes(this.lang)) return false;
+                if (this.region !== 'All regions' && p.region !== this.region) return false;
+                if (q && !p.game_titles.some(t => t.toLowerCase().includes(q))) return false;
+                return true;
+            });
+        },
+
+        get isFiltered() {
+            return this.query !== '' || this.lang !== 'All' || this.region !== 'All regions';
+        },
+
+        copy(psnId) {
+            navigator.clipboard.writeText(psnId).catch(() => {});
+            this.copied = psnId;
+            setTimeout(() => { if (this.copied === psnId) this.copied = null; }, 3000);
+        },
+
+        clearFilters() {
+            this.query = '';
+            this.lang = 'All';
+            this.region = 'All regions';
+        },
+    };
+});
+
 Alpine.data('onboarding', () => {
     const initial = window.__onboardingInit || {};
 

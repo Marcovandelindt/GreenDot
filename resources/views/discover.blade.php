@@ -1,44 +1,8 @@
-<script>
-function discoverPage(players) {
-    return {
-        players,
-        query: '',
-        lang: 'All',
-        region: 'All regions',
-        copied: null,
-
-        get filteredPlayers() {
-            const q = this.query.trim().toLowerCase();
-            return this.players.filter(p => {
-                if (this.lang !== 'All' && !p.languages.includes(this.lang)) return false;
-                if (this.region !== 'All regions' && p.region !== this.region) return false;
-                if (q && !p.game_titles.some(t => t.toLowerCase().includes(q))) return false;
-                return true;
-            });
-        },
-
-        get isFiltered() {
-            return this.query !== '' || this.lang !== 'All' || this.region !== 'All regions';
-        },
-
-        copy(psnId) {
-            navigator.clipboard.writeText(psnId).catch(() => {});
-            this.copied = psnId;
-            setTimeout(() => { if (this.copied === psnId) this.copied = null; }, 3000);
-        },
-
-        clearFilters() {
-            this.query = '';
-            this.lang = 'All';
-            this.region = 'All regions';
-        }
-    };
-}
-</script>
-
 <x-layouts.app title="Discover — Green Dot">
 
-<div x-data="discoverPage(@json($players))">
+<script>window.__discoverData = @json($players);</script>
+
+<div x-data="discoverPage">
 
     {{-- ─── Hero ───────────────────────────────────────────────────────────── --}}
     <section class="px-4 lg:px-16 pt-7 pb-5 lg:pt-14 lg:pb-7 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 lg:gap-12">
@@ -92,14 +56,37 @@ function discoverPage(players) {
         <div class="flex items-center gap-3 p-[10px] rounded-[18px] bg-surface border border-line">
 
             {{-- Game search --}}
-            <label class="flex-grow h-[52px] flex items-center gap-[10px] px-4 rounded-[12px] bg-surface-2 text-muted cursor-text">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-                <span class="sr-only">Filter by game</span>
-                <input type="search"
-                       x-model.debounce.300ms="query"
-                       placeholder="Filter by game, e.g. Helldivers 2"
-                       class="flex-grow min-w-0 h-full border-0 outline-none bg-transparent font-sans text-[16px] text-text placeholder:text-muted">
-            </label>
+            <div class="flex-grow relative" @click.outside="showDropdown = false">
+                <label class="h-[52px] flex items-center gap-[10px] px-4 rounded-[12px] bg-surface-2 text-muted cursor-text">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <span class="sr-only">Search games</span>
+                    <input type="search"
+                           x-model.debounce.300ms="query"
+                           @input.debounce.300ms="fetchGames($event.target.value)"
+                           @keydown.escape="showDropdown = false"
+                           placeholder="Search a game, e.g. Elden Ring"
+                           class="flex-grow min-w-0 h-full border-0 outline-none bg-transparent font-sans text-[16px] text-text placeholder:text-muted">
+                </label>
+
+                {{-- Dropdown --}}
+                <div x-show="showDropdown"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="opacity-0 scale-[.98]"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     class="absolute top-[calc(100%+6px)] left-0 right-0 z-[100] bg-surface border border-line rounded-[16px] shadow-card overflow-hidden py-1">
+                    <template x-for="game in gameResults" :key="game.id">
+                        <a :href="`/games/${game.slug}`"
+                           @click="showDropdown = false"
+                           class="flex items-center gap-3 px-3 py-[9px] hover:bg-surface-2 transition-colors no-underline">
+                            <div class="flex-shrink-0 w-8 rounded-[5px]"
+                                 style="aspect-ratio: 3/4"
+                                 :style="coverStyle(game)"></div>
+                            <span class="flex-grow text-[14px] font-semibold text-text truncate" x-text="game.title"></span>
+                            <svg class="flex-shrink-0 text-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                        </a>
+                    </template>
+                </div>
+            </div>
 
             {{-- Language pills --}}
             <div role="group" aria-label="Language" class="flex gap-1 p-1 rounded-[12px] bg-surface-2">
@@ -143,14 +130,37 @@ function discoverPage(players) {
     <section aria-label="Filters" class="lg:hidden px-4 flex flex-col gap-[10px]">
 
         {{-- Game search --}}
-        <label class="h-[50px] flex items-center gap-[10px] px-[14px] rounded-[14px] bg-surface border border-line text-muted cursor-text">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <span class="sr-only">Filter by game</span>
-            <input type="search"
-                   x-model.debounce.300ms="query"
-                   placeholder="Filter by game"
-                   class="flex-grow min-w-0 h-full border-0 outline-none bg-transparent font-sans text-[16px] text-text placeholder:text-muted">
-        </label>
+        <div class="relative" @click.outside="showDropdown = false">
+            <label class="h-[50px] flex items-center gap-[10px] px-[14px] rounded-[14px] bg-surface border border-line text-muted cursor-text">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                <span class="sr-only">Search games</span>
+                <input type="search"
+                       x-model.debounce.300ms="query"
+                       @input.debounce.300ms="fetchGames($event.target.value)"
+                       @keydown.escape="showDropdown = false"
+                       placeholder="Search a game"
+                       class="flex-grow min-w-0 h-full border-0 outline-none bg-transparent font-sans text-[16px] text-text placeholder:text-muted">
+            </label>
+
+            {{-- Dropdown --}}
+            <div x-show="showDropdown"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0 scale-[.98]"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 class="absolute top-[calc(100%+6px)] left-0 right-0 z-[100] bg-surface border border-line rounded-[16px] shadow-card overflow-hidden py-1">
+                <template x-for="game in gameResults" :key="game.id">
+                    <a :href="`/games/${game.slug}`"
+                       @click="showDropdown = false"
+                       class="flex items-center gap-3 px-3 py-[9px] hover:bg-surface-2 transition-colors no-underline">
+                        <div class="flex-shrink-0 w-7 rounded-[5px]"
+                             style="aspect-ratio: 3/4"
+                             :style="coverStyle(game)"></div>
+                        <span class="flex-grow text-[14px] font-semibold text-text truncate" x-text="game.title"></span>
+                        <svg class="flex-shrink-0 text-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                    </a>
+                </template>
+            </div>
+        </div>
 
         {{-- Language + region selects --}}
         <div class="grid grid-cols-2 gap-[10px]">
@@ -295,5 +305,6 @@ function discoverPage(players) {
     </div>
 
 </div>
+
 
 </x-layouts.app>
