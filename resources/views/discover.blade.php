@@ -246,15 +246,18 @@
                 </div>
 
                 {{-- Currently playing --}}
-                <div class="flex items-center gap-3 p-[10px] rounded-[14px] bg-surface-2" x-show="player.current_game">
-                    <div class="flex-shrink-0 w-11 h-11 rounded-[8px]"
-                         :style="player.current_game?.cover_style"></div>
-                    <div class="flex flex-col gap-[3px] min-w-0">
-                        <span class="flex items-center gap-[6px] text-[11px] font-bold tracking-[.08em] uppercase text-green-text">
-                            <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
-                            Currently playing
-                        </span>
-                        <span class="text-[14px] font-semibold truncate" x-text="player.current_game?.title"></span>
+                <div class="flex flex-col gap-[6px] p-[10px] rounded-[14px] bg-surface-2" x-show="player.current_games.length > 0">
+                    <span class="flex items-center gap-[6px] text-[11px] font-bold tracking-[.08em] uppercase text-green-text">
+                        <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
+                        Currently playing
+                    </span>
+                    <div class="flex flex-col gap-[5px]">
+                        <template x-for="g in player.current_games" :key="g.title">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-[6px]" :style="g.cover_style"></div>
+                                <span class="text-[13px] font-semibold truncate" x-text="g.title"></span>
+                            </div>
+                        </template>
                     </div>
                 </div>
 

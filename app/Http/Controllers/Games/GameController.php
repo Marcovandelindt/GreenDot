@@ -13,17 +13,14 @@ class GameController extends Controller
     {
         $game = Game::where('slug', $slug)->firstOrFail();
 
-        $authUser = auth()->user()->load(['favoriteGames']);
+        $authUser = auth()->user()->load(['favoriteGames', 'currentGames']);
 
-        $isPlaying     = (int) $authUser->current_game_id === $game->id;
+        $isPlaying     = $authUser->currentGames->contains('id', $game->id);
         $isFavorite    = $authUser->favoriteGames->contains('id', $game->id);
         $favoriteCount = $authUser->favoriteGames->count();
 
         $players = User::with(['languages'])
-            ->where(fn($q) => $q
-                ->whereHas('games', fn($q) => $q->where('game_id', $game->id))
-                ->orWhere('current_game_id', $game->id)
-            )
+            ->whereHas('games', fn($q) => $q->where('game_id', $game->id))
             ->where('id', '!=', $authUser->id)
             ->orderByDesc('last_active_at')
             ->limit(16)

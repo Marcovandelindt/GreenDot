@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -24,7 +23,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'accepts_all_requests',
         'verified',
         'last_active_at',
-        'current_game_id',
         'email_verification_code',
         'email_verification_expires_at',
     ];
@@ -43,9 +41,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function currentGame(): BelongsTo
+    public function currentGames(): BelongsToMany
     {
-        return $this->belongsTo(Game::class, 'current_game_id');
+        return $this->belongsToMany(Game::class, 'game_user')
+            ->wherePivot('is_playing', true)
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position']);
     }
 
     public function languages(): BelongsToMany
@@ -56,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class, 'game_user')
-            ->withPivot(['hours', 'is_favorite', 'favorite_position'])
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position'])
             ->orderByPivot('hours', 'desc');
     }
 
@@ -64,7 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Game::class, 'game_user')
             ->wherePivot('is_favorite', true)
-            ->withPivot(['hours', 'is_favorite', 'favorite_position'])
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position'])
             ->orderByPivot('favorite_position');
     }
 

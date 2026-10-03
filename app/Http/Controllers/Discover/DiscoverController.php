@@ -10,7 +10,7 @@ class DiscoverController extends Controller
 {
     public function __invoke(): View
     {
-        $players = User::with(['languages', 'favoriteGames', 'currentGame', 'games'])
+        $players = User::with(['languages', 'favoriteGames', 'currentGames', 'games'])
             ->orderByDesc('last_active_at')
             ->get()
             ->map(fn(User $u) => [
@@ -25,20 +25,16 @@ class DiscoverController extends Controller
                 'is_recently_active'   => $u->isRecentlyActive(),
                 'accepts_all_requests' => $u->accepts_all_requests,
                 'verified'             => $u->verified,
-                'current_game'         => $u->currentGame ? [
-                    'title'       => $u->currentGame->title,
-                    'cover_style' => $u->currentGame->coverStyle(),
-                ] : null,
+                'current_games'        => $u->currentGames->map(fn($g) => [
+                    'title'       => $g->title,
+                    'cover_style' => $g->coverStyle(),
+                ])->values()->all(),
                 'favorite_games'       => $u->favoriteGames->take(3)->map(fn($g) => [
                     'title'       => $g->title,
                     'short_title' => strtoupper($g->short_title ?? $g->title),
                     'cover_style' => $g->coverStyle(),
                 ])->values()->all(),
-                'game_titles'          => $u->games->pluck('title')
-                    ->merge($u->currentGame ? [$u->currentGame->title] : [])
-                    ->unique()
-                    ->values()
-                    ->all(),
+                'game_titles'          => $u->games->pluck('title')->unique()->values()->all(),
                 'profile_url'          => route('profile.show', $u->psn_id),
             ])
             ->all();

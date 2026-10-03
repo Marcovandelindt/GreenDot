@@ -23,7 +23,6 @@ return new class extends Migration
             $table->boolean('accepts_all_requests')->default(false);
             $table->boolean('verified')->default(false);
             $table->timestamp('last_active_at')->nullable();
-            $table->unsignedBigInteger('current_game_id')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
         });
