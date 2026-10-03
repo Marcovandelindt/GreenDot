@@ -26,9 +26,19 @@
                 <nav aria-label="Main">
                     <ul class="flex gap-2">
                         <li>
-                            <a href="{{ route('discover') }}"
+                            <a href="{{ route('feed') }}"
                                @class([
                                    'h-11 px-[14px] flex items-center gap-2 rounded-[10px] no-underline font-semibold text-[15px]',
+                                   'bg-surface-2 text-text'  => request()->routeIs('feed'),
+                                   'text-muted hover:text-text transition-colors' => !request()->routeIs('feed'),
+                               ])>
+                                Feed
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('discover') }}"
+                               @class([
+                                   'h-11 px-[14px] flex items-center rounded-[10px] no-underline font-semibold text-[15px]',
                                    'bg-surface-2 text-text'  => request()->routeIs('discover'),
                                    'text-muted hover:text-text transition-colors' => !request()->routeIs('discover'),
                                ])>
@@ -36,13 +46,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('random') }}"
+                            <a href="{{ route('games.index') }}"
                                @class([
                                    'h-11 px-[14px] flex items-center rounded-[10px] no-underline font-semibold text-[15px]',
-                                   'bg-surface-2 text-text'  => request()->routeIs('random'),
-                                   'text-muted hover:text-text transition-colors' => !request()->routeIs('random'),
+                                   'bg-surface-2 text-text'  => request()->routeIs('games.*'),
+                                   'text-muted hover:text-text transition-colors' => !request()->routeIs('games.*'),
                                ])>
-                                Random
+                                Games
                             </a>
                         </li>
                         @auth

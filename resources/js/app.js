@@ -136,6 +136,117 @@ Alpine.data('discoverPage', () => {
     };
 });
 
+Alpine.data('feedPage', () => {
+    const { posts, urlStore, urlSearch } = window.__feedData || {};
+
+    return {
+        posts:            posts || [],
+        caption:          '',
+        gameQuery:        '',
+        gameResults:      [],
+        selectedGame:     null,
+        showGameDropdown: false,
+        submitting:       false,
+
+        get charsLeft() {
+            return 280 - this.caption.length;
+        },
+
+        async searchGames(q) {
+            if (q.trim().length < 2) {
+                this.gameResults      = [];
+                this.showGameDropdown = false;
+                return;
+            }
+            try {
+                const res         = await fetch(`${urlSearch}?q=${encodeURIComponent(q)}`);
+                this.gameResults  = await res.json();
+                this.showGameDropdown = this.gameResults.length > 0;
+            } catch {
+                this.gameResults      = [];
+                this.showGameDropdown = false;
+            }
+        },
+
+        selectGame(game) {
+            this.selectedGame     = game;
+            this.gameQuery        = game.title;
+            this.showGameDropdown = false;
+        },
+
+        clearGame() {
+            this.selectedGame = null;
+            this.gameQuery    = '';
+        },
+
+        coverStyle(game) {
+            if (game.cover_url) return `background: url('${game.cover_url}') center/cover no-repeat`;
+            const c1 = game.placeholder_color_1 || '#1a1a2e';
+            const c2 = game.placeholder_color_2 || '#16213e';
+            return `background: linear-gradient(160deg, ${c1} 0%, ${c2} 100%)`;
+        },
+
+        async submit() {
+            if (!this.caption.trim()) return;
+            this.submitting = true;
+            try {
+                const res = await fetch(urlStore, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN':  document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type':  'application/json',
+                        'Accept':        'application/json',
+                    },
+                    body: JSON.stringify({
+                        caption: this.caption,
+                        game_id: this.selectedGame?.id || null,
+                        type:    'update',
+                    }),
+                });
+                const post = await res.json();
+                this.posts.unshift(post);
+                this.caption = '';
+                this.clearGame();
+            } finally {
+                this.submitting = false;
+            }
+        },
+
+        timeAgo(dateStr) {
+            const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+            if (diff < 60)   return 'Just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        },
+    };
+});
+
+Alpine.data('gameBrowse', () => ({
+    query:   '',
+    results: [],
+
+    async search(q) {
+        if (q.trim().length < 2) {
+            this.results = [];
+            return;
+        }
+        try {
+            const res    = await fetch(`/games/search?q=${encodeURIComponent(q)}`);
+            this.results = await res.json();
+        } catch {
+            this.results = [];
+        }
+    },
+
+    coverStyle(game) {
+        if (game.cover_url) return `background: url('${game.cover_url}') center/cover no-repeat`;
+        const c1 = game.placeholder_color_1 || '#1a1a2e';
+        const c2 = game.placeholder_color_2 || '#16213e';
+        return `background: linear-gradient(160deg, ${c1} 0%, ${c2} 100%)`;
+    },
+}));
+
 Alpine.data('onboarding', () => {
     const initial = window.__onboardingInit || {};
 
