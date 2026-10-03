@@ -1,11 +1,14 @@
 <x-layouts.app title="{{ $game->title }} — Green Dot">
-<div x-data="gameDetail(@json([
-    'playing'       => $isPlaying,
-    'favorite'      => $isFavorite,
-    'favoriteCount' => $favoriteCount,
-    'urlPlaying'    => route('profile.games.playing', $game),
-    'urlFavorite'   => route('profile.games.favorite', $game),
-]))"
+@php
+    $gameInit = [
+        'playing'       => $isPlaying,
+        'favorite'      => $isFavorite,
+        'favoriteCount' => $favoriteCount,
+        'urlPlaying'    => route('profile.games.playing', $game),
+        'urlFavorite'   => route('profile.games.favorite', $game),
+    ];
+@endphp
+<div x-data="gameDetail(@json($gameInit))"
      x-init="init()">
 
     {{-- ─── Hero ───────────────────────────────────────────────────────────── --}}
