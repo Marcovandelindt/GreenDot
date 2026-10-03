@@ -45,7 +45,21 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Game::class, 'game_user')
             ->wherePivot('is_playing', true)
-            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position']);
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'is_played', 'is_completed', 'favorite_position']);
+    }
+
+    public function playedGames(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_user')
+            ->wherePivot('is_played', true)
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'is_played', 'is_completed', 'favorite_position']);
+    }
+
+    public function completedGames(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_user')
+            ->wherePivot('is_completed', true)
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'is_played', 'is_completed', 'favorite_position']);
     }
 
     public function languages(): BelongsToMany
@@ -56,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class, 'game_user')
-            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position'])
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'is_played', 'is_completed', 'favorite_position'])
             ->orderByPivot('hours', 'desc');
     }
 
@@ -64,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Game::class, 'game_user')
             ->wherePivot('is_favorite', true)
-            ->withPivot(['hours', 'is_favorite', 'is_playing', 'favorite_position'])
+            ->withPivot(['hours', 'is_favorite', 'is_playing', 'is_played', 'is_completed', 'favorite_position'])
             ->orderByPivot('favorite_position');
     }
 

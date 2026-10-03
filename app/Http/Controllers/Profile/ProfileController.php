@@ -11,7 +11,7 @@ class ProfileController extends Controller
     public function show(string $psn_id): View
     {
         $user = User::where('psn_id', $psn_id)
-            ->with(['languages', 'favoriteGames', 'currentGame', 'games'])
+            ->with(['languages', 'favoriteGames', 'currentGames', 'completedGames', 'games'])
             ->firstOrFail();
 
         return view('profile.show', compact('user'));

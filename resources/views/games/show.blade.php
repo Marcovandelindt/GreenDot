@@ -3,9 +3,13 @@
 window.__gameDetailData = {
     playing:       @json($isPlaying),
     favorite:      @json($isFavorite),
+    played:        @json($isPlayed),
+    completed:     @json($isCompleted),
     favoriteCount: @json($favoriteCount),
     urlPlaying:    @json(route('profile.games.playing', $game)),
     urlFavorite:   @json(route('profile.games.favorite', $game)),
+    urlPlayed:     @json(route('profile.games.played', $game)),
+    urlCompleted:  @json(route('profile.games.completed', $game)),
 };
 </script>
 <div x-data="gameDetail">
@@ -81,6 +85,47 @@ window.__gameDetailData = {
                             <span x-text="favoriteLabel"></span>
                             <span class="text-[12px] font-normal text-muted"
                                   x-text="!favorite && favoriteCount >= 5 ? 'Remove a favorite first' : 'Your top 5 on your profile'"></span>
+                        </span>
+                    </button>
+
+                </div>
+
+                {{-- Played + Completed --}}
+                <div class="flex flex-col gap-2 lg:flex-row lg:gap-3">
+
+                    {{-- Played --}}
+                    <button type="button"
+                            @click="toggle('played')"
+                            :disabled="loading === 'played'"
+                            class="px-5 py-3 flex items-center gap-3 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-60 text-left"
+                            :class="played
+                                ? 'bg-surface-2 text-text border-line'
+                                : 'bg-surface border-line text-text hover:bg-surface-2'">
+                        <svg class="flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 2a10 10 0 1 0 10 10"/>
+                            <path d="M16 6l-4 4-2-2"/>
+                        </svg>
+                        <span class="flex flex-col gap-[2px]">
+                            <span x-text="played ? 'Played' : 'Mark as played'"></span>
+                            <span class="text-[12px] font-normal text-muted">Added to your game history</span>
+                        </span>
+                    </button>
+
+                    {{-- Completed --}}
+                    <button type="button"
+                            @click="toggle('completed')"
+                            :disabled="loading === 'completed'"
+                            class="px-5 py-3 flex items-center gap-3 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-60 text-left"
+                            :class="completed
+                                ? 'bg-surface-2 text-text border-line'
+                                : 'bg-surface border-line text-text hover:bg-surface-2'">
+                        <svg class="flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                        <span class="flex flex-col gap-[2px]">
+                            <span x-text="completed ? 'Completed' : 'Mark as completed'"></span>
+                            <span class="text-[12px] font-normal text-muted">You've finished this game</span>
                         </span>
                     </button>
 

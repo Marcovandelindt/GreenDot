@@ -1,11 +1,16 @@
 import Alpine from 'alpinejs';
 
 Alpine.data('gameDetail', () => {
-    const { playing, favorite, favoriteCount, urlPlaying, urlFavorite } = window.__gameDetailData || {};
+    const {
+        playing, favorite, played, completed,
+        favoriteCount, urlPlaying, urlFavorite, urlPlayed, urlCompleted,
+    } = window.__gameDetailData || {};
 
     return {
         playing:       !!playing,
         favorite:      !!favorite,
+        played:        !!played,
+        completed:     !!completed,
         favoriteCount: favoriteCount || 0,
         loading:       null,
 
@@ -18,8 +23,13 @@ Alpine.data('gameDetail', () => {
         async toggle(type) {
             this.loading = type;
             try {
-                const url = type === 'playing' ? urlPlaying : urlFavorite;
-                const res = await fetch(url, {
+                const urls = {
+                    playing:   urlPlaying,
+                    favorite:  urlFavorite,
+                    played:    urlPlayed,
+                    completed: urlCompleted,
+                };
+                const res = await fetch(urls[type], {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -27,11 +37,12 @@ Alpine.data('gameDetail', () => {
                     },
                 });
                 const data = await res.json();
-                if (type === 'playing') {
-                    this.playing = data.active;
-                } else {
+                if (type === 'favorite') {
                     this.favorite      = data.active;
                     this.favoriteCount = data.count;
+                } else {
+                    this[type] = data.active;
+                    if (type === 'completed' && data.active) this.played = true;
                 }
             } finally {
                 this.loading = null;

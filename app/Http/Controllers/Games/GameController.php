@@ -13,10 +13,12 @@ class GameController extends Controller
     {
         $game = Game::where('slug', $slug)->firstOrFail();
 
-        $authUser = auth()->user()->load(['favoriteGames', 'currentGames']);
+        $authUser = auth()->user()->load(['favoriteGames', 'currentGames', 'playedGames', 'completedGames']);
 
         $isPlaying     = $authUser->currentGames->contains('id', $game->id);
         $isFavorite    = $authUser->favoriteGames->contains('id', $game->id);
+        $isPlayed      = $authUser->playedGames->contains('id', $game->id);
+        $isCompleted   = $authUser->completedGames->contains('id', $game->id);
         $favoriteCount = $authUser->favoriteGames->count();
 
         $players = User::with(['languages'])
@@ -26,6 +28,6 @@ class GameController extends Controller
             ->limit(16)
             ->get();
 
-        return view('games.show', compact('game', 'isPlaying', 'isFavorite', 'favoriteCount', 'players'));
+        return view('games.show', compact('game', 'isPlaying', 'isFavorite', 'isPlayed', 'isCompleted', 'favoriteCount', 'players'));
     }
 }

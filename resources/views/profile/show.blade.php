@@ -99,18 +99,21 @@
     </section>
 
     {{-- ─── Currently playing ──────────────────────────────────────────────── --}}
-    @if($user->currentGame)
+    @if($user->currentGames->isNotEmpty())
         <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line" aria-label="Currently playing">
-            <div class="flex items-center gap-4 p-4 rounded-[18px] bg-surface border border-line max-w-sm">
-                <div class="flex-shrink-0 w-[52px] h-[52px] rounded-[10px]"
-                     style="{{ $user->currentGame->coverStyle() }}"></div>
-                <div class="flex flex-col gap-[4px] min-w-0">
-                    <span class="flex items-center gap-[6px] text-[11px] font-bold tracking-[.08em] uppercase text-green-text">
-                        <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
-                        Currently playing
-                    </span>
-                    <span class="text-[15px] font-semibold truncate">{{ $user->currentGame->title }}</span>
-                </div>
+            <h2 class="m-0 mb-3 text-[11px] font-bold tracking-[.08em] uppercase text-green-text flex items-center gap-[6px]">
+                <span class="w-[6px] h-[6px] rounded-full bg-dot" aria-hidden="true"></span>
+                Currently playing
+            </h2>
+            <div class="flex flex-col gap-2 max-w-sm">
+                @foreach($user->currentGames as $game)
+                    <a href="{{ route('games.show', $game->slug) }}"
+                       class="flex items-center gap-4 p-4 rounded-[18px] bg-surface border border-line no-underline hover:bg-surface-2 transition-colors">
+                        <div class="flex-shrink-0 w-[52px] h-[52px] rounded-[10px]"
+                             style="{{ $game->coverStyle() }}"></div>
+                        <span class="text-[15px] font-semibold text-text truncate">{{ $game->title }}</span>
+                    </a>
+                @endforeach
             </div>
         </section>
     @endif
@@ -133,6 +136,31 @@
         </section>
     @endif
 
+    {{-- ─── Completed games ───────────────────────────────────────────────── --}}
+    @if($user->completedGames->isNotEmpty())
+        <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line" aria-label="Completed games">
+            <h2 class="m-0 mb-3 lg:mb-4 text-[11px] font-bold tracking-[.08em] uppercase text-muted">
+                Completed
+                <span class="opacity-50 font-semibold normal-case tracking-normal text-[13px] ml-1">({{ $user->completedGames->count() }})</span>
+            </h2>
+            <div class="flex gap-3 lg:gap-4 flex-wrap">
+                @foreach($user->completedGames as $game)
+                    <a href="{{ route('games.show', $game->slug) }}"
+                       class="relative w-[90px] lg:w-[110px] aspect-[3/4] rounded-[12px] lg:rounded-[14px] flex items-end p-[10px] flex-shrink-0 [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)] no-underline"
+                       style="{{ $game->coverStyle() }}"
+                       title="{{ $game->title }}">
+                        <span class="absolute top-[6px] right-[6px] w-5 h-5 rounded-full bg-green flex items-center justify-center" aria-hidden="true">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                        </span>
+                        <span class="font-display font-extrabold text-[11px] lg:text-[12px] leading-[1.05] tracking-[.02em] text-white [text-shadow:0_1px_6px_rgba(0,0,0,.55)]">
+                            {{ strtoupper($game->short_title ?? $game->title) }}
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     {{-- ─── All games ───────────────────────────────────────────────────────── --}}
     @if($user->games->isNotEmpty())
         <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line" aria-label="Games">
@@ -142,23 +170,34 @@
             </h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-3 max-w-[800px]">
                 @foreach($user->games as $game)
-                    <div class="flex items-center gap-3 p-3 lg:p-[14px] rounded-[14px] bg-surface border border-line">
+                    <a href="{{ route('games.show', $game->slug) }}"
+                       class="flex items-center gap-3 p-3 lg:p-[14px] rounded-[14px] bg-surface border border-line no-underline hover:bg-surface-2 transition-colors">
                         <div class="flex-shrink-0 w-10 h-10 lg:w-11 lg:h-11 rounded-[8px]"
                              style="{{ $game->coverStyle() }}"></div>
                         <div class="min-w-0 flex-grow">
-                            <span class="block text-[14px] lg:text-[15px] font-semibold truncate">{{ $game->title }}</span>
+                            <span class="block text-[14px] lg:text-[15px] font-semibold text-text truncate">{{ $game->title }}</span>
+                            <div class="flex gap-[6px] mt-[3px]">
+                                @if($game->pivot->is_playing)
+                                    <span class="text-[11px] font-semibold text-green-text">Playing</span>
+                                @endif
+                                @if($game->pivot->is_completed)
+                                    <span class="text-[11px] font-semibold text-muted">Completed</span>
+                                @elseif($game->pivot->is_played)
+                                    <span class="text-[11px] font-semibold text-muted">Played</span>
+                                @endif
+                            </div>
                         </div>
                         @if($game->pivot->hours)
                             <span class="flex-shrink-0 text-[13px] text-muted font-semibold tabular-nums">{{ $game->pivot->hours }}h</span>
                         @endif
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </section>
     @endif
 
     {{-- ─── Empty state ─────────────────────────────────────────────────────── --}}
-    @if($user->games->isEmpty() && !$user->currentGame && !$user->bio)
+    @if($user->games->isEmpty() && $user->currentGames->isEmpty() && !$user->bio)
         <div class="px-4 lg:px-16 py-8 lg:py-12 border-t border-line">
             <p class="text-[15px] text-muted">This player hasn't filled in their profile yet.</p>
         </div>
