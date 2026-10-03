@@ -31,8 +31,7 @@
         <template x-for="game in results" :key="game.id">
             <a :href="`/games/${game.slug}`"
                class="group flex flex-col gap-[10px] no-underline">
-                <div class="w-full rounded-[12px] overflow-hidden [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.07)]"
-                     style="aspect-ratio: 3/4"
+                <div class="w-full aspect-[3/4] rounded-[12px] overflow-hidden [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.07)]"
                      :style="coverStyle(game)"></div>
                 <div class="flex flex-col gap-[2px]">
                     <span class="text-[13px] font-semibold text-text group-hover:text-green-text transition-colors leading-snug truncate"

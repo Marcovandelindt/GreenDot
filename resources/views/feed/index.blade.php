@@ -85,8 +85,7 @@ window.__feedData = {
 
                     {{-- Selected game badge --}}
                     <div x-show="selectedGame" class="mt-2 flex items-center gap-2">
-                        <div class="w-6 flex-shrink-0 rounded-[4px]"
-                             style="aspect-ratio: 3/4"
+                        <div class="w-8 aspect-[3/4] flex-shrink-0 rounded-[4px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                              :style="selectedGame ? coverStyle(selectedGame) : ''"></div>
                         <span class="text-[13px] font-semibold text-text truncate" x-text="selectedGame?.title"></span>
                     </div>
@@ -101,8 +100,7 @@ window.__feedData = {
                             <button type="button"
                                     @click="selectGame(game)"
                                     class="w-full flex items-center gap-3 px-3 py-[9px] hover:bg-surface-2 transition-colors text-left cursor-pointer border-0 bg-transparent">
-                                <div class="flex-shrink-0 w-7 rounded-[4px]"
-                                     style="aspect-ratio: 3/4"
+                                <div class="flex-shrink-0 w-8 aspect-[3/4] rounded-[4px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                                      :style="coverStyle(game)"></div>
                                 <span class="flex-grow text-[14px] font-semibold text-text truncate" x-text="game.title"></span>
                             </button>
@@ -144,14 +142,14 @@ window.__feedData = {
                     </div>
 
                     {{-- Game tag --}}
-                    <div x-show="post.game" class="flex items-center gap-2">
-                        <div class="w-8 flex-shrink-0 rounded-[5px]"
-                             style="aspect-ratio: 3/4"
+                    <a x-show="post.game"
+                       :href="`/games/${post.game?.slug}`"
+                       class="flex items-center gap-[10px] self-start no-underline group">
+                        <div class="w-10 aspect-[3/4] flex-shrink-0 rounded-[6px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                              :style="post.game ? coverStyle(post.game) : ''"></div>
-                        <a :href="`/games/${post.game?.slug}`"
-                           x-text="post.game?.title"
-                           class="text-[13px] font-semibold text-text no-underline hover:text-green-text transition-colors truncate"></a>
-                    </div>
+                        <span x-text="post.game?.title"
+                              class="text-[13px] font-semibold text-text group-hover:text-green-text transition-colors truncate"></span>
+                    </a>
 
                     {{-- Caption --}}
                     <p class="m-0 text-[15px] leading-relaxed text-text" x-text="post.caption"></p>
@@ -180,7 +178,7 @@ window.__feedData = {
                 <ul class="m-0 p-0 list-none flex flex-col gap-[10px]">
                     @foreach($currentGames as $game)
                     <li class="flex items-center gap-3">
-                        <div class="flex-shrink-0 w-8 h-8 rounded-[6px]"
+                        <div class="flex-shrink-0 w-8 aspect-[3/4] rounded-[6px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                              style="{{ $game->coverStyle() }}"></div>
                         <a href="{{ route('games.show', $game->slug) }}"
                            class="text-[13px] font-semibold text-text no-underline hover:text-green-text transition-colors truncate">

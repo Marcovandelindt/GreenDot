@@ -22,8 +22,7 @@ window.__gameDetailData = {
         <div class="flex items-start gap-6 lg:gap-10">
 
             {{-- Cover --}}
-            <div class="flex-shrink-0 w-[100px] lg:w-[160px] rounded-[12px] lg:rounded-[16px] overflow-hidden [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
-                 style="aspect-ratio: 3/4">
+            <div class="flex-shrink-0 w-[100px] lg:w-[160px] aspect-[3/4] rounded-[12px] lg:rounded-[16px] overflow-hidden [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]">
                 @if($game->cover_url)
                     <img src="{{ str_replace('t_cover_big', 't_cover_big_2x', $game->cover_url) }}"
                          alt="{{ $game->title }}"

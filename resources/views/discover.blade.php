@@ -78,8 +78,7 @@
                         <a :href="`/games/${game.slug}`"
                            @click="showDropdown = false"
                            class="flex items-center gap-3 px-3 py-[9px] hover:bg-surface-2 transition-colors no-underline">
-                            <div class="flex-shrink-0 w-8 rounded-[5px]"
-                                 style="aspect-ratio: 3/4"
+                            <div class="flex-shrink-0 w-8 aspect-[3/4] rounded-[5px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                                  :style="coverStyle(game)"></div>
                             <span class="flex-grow text-[14px] font-semibold text-text truncate" x-text="game.title"></span>
                             <svg class="flex-shrink-0 text-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
@@ -152,8 +151,7 @@
                     <a :href="`/games/${game.slug}`"
                        @click="showDropdown = false"
                        class="flex items-center gap-3 px-3 py-[9px] hover:bg-surface-2 transition-colors no-underline">
-                        <div class="flex-shrink-0 w-7 rounded-[5px]"
-                             style="aspect-ratio: 3/4"
+                        <div class="flex-shrink-0 w-7 aspect-[3/4] rounded-[5px] [box-shadow:inset_0_0_0_1px_rgba(255,255,255,0.08)]"
                              :style="coverStyle(game)"></div>
                         <span class="flex-grow text-[14px] font-semibold text-text truncate" x-text="game.title"></span>
                         <svg class="flex-shrink-0 text-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
