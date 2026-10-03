@@ -3,7 +3,8 @@ import Alpine from 'alpinejs';
 Alpine.data('gameDetail', () => {
     const {
         playing, favorite, played, completed,
-        favoriteCount, urlPlaying, urlFavorite, urlPlayed, urlCompleted,
+        hours, favoriteCount,
+        urlPlaying, urlFavorite, urlPlayed, urlCompleted, urlHours,
     } = window.__gameDetailData || {};
 
     return {
@@ -11,8 +12,10 @@ Alpine.data('gameDetail', () => {
         favorite:      !!favorite,
         played:        !!played,
         completed:     !!completed,
+        hours:         hours || 0,
         favoriteCount: favoriteCount || 0,
         loading:       null,
+        hoursSaving:   false,
 
         get favoriteLabel() {
             if (this.favorite) return 'In favorites';
@@ -46,6 +49,25 @@ Alpine.data('gameDetail', () => {
                 }
             } finally {
                 this.loading = null;
+            }
+        },
+
+        async saveHours(value) {
+            const h = Math.max(0, parseInt(value) || 0);
+            this.hours = h;
+            this.hoursSaving = true;
+            try {
+                await fetch(urlHours, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ hours: h }),
+                });
+            } finally {
+                this.hoursSaving = false;
             }
         },
     };

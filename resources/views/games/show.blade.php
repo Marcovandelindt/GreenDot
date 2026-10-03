@@ -6,10 +6,12 @@ window.__gameDetailData = {
     played:        @json($isPlayed),
     completed:     @json($isCompleted),
     favoriteCount: @json($favoriteCount),
+    hours:         @json(auth()->user()->games()->where('game_id', $game->id)->first()?->pivot?->hours ?? 0),
     urlPlaying:    @json(route('profile.games.playing', $game)),
     urlFavorite:   @json(route('profile.games.favorite', $game)),
     urlPlayed:     @json(route('profile.games.played', $game)),
     urlCompleted:  @json(route('profile.games.completed', $game)),
+    urlHours:      @json(route('profile.games.hours', $game)),
 };
 </script>
 <div x-data="gameDetail">
@@ -129,6 +131,24 @@ window.__gameDetailData = {
                         </span>
                     </button>
 
+                </div>
+
+                {{-- Hours played --}}
+                <div class="flex items-center gap-3">
+                    <label class="flex items-center gap-2 h-11 px-4 rounded-[12px] bg-surface border border-line text-[14px] font-semibold cursor-text">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-muted flex-shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                        <input type="number"
+                               min="0"
+                               max="9999"
+                               :value="hours"
+                               @change="saveHours($event.target.value)"
+                               @blur="saveHours($event.target.value)"
+                               class="w-16 bg-transparent border-0 outline-none text-text font-semibold tabular-nums"
+                               placeholder="0"
+                               aria-label="Hours played">
+                        <span class="text-muted font-normal">hours played</span>
+                    </label>
+                    <span x-show="hoursSaving" class="text-[12px] text-muted">Saving…</span>
                 </div>
 
             </div>

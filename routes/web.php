@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profile/games/{game}/favorite', [ProfileGameController::class, 'toggleFavorite'])->name('profile.games.favorite');
     Route::post('/profile/games/{game}/played', [ProfileGameController::class, 'togglePlayed'])->name('profile.games.played');
     Route::post('/profile/games/{game}/completed', [ProfileGameController::class, 'toggleCompleted'])->name('profile.games.completed');
+    Route::post('/profile/games/{game}/hours', [ProfileGameController::class, 'updateHours'])->name('profile.games.hours');
 });
 
 // Logout (auth not required as a guard — Laravel handles gracefully)
