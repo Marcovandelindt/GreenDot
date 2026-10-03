@@ -47,42 +47,45 @@
                     <button type="button"
                             @click="toggle('playing')"
                             :disabled="loading === 'playing'"
-                            class="h-11 lg:h-12 px-5 flex items-center justify-center gap-2 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-60"
+                            class="px-5 py-3 flex items-center gap-3 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-60 text-left"
                             :class="playing
                                 ? 'bg-green text-green-ink border-green'
                                 : 'bg-surface border-line text-text hover:bg-surface-2'"
                             style="box-shadow: none"
                             :style="playing ? 'box-shadow: 0 6px 18px rgba(61,226,127,.22)' : ''">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="9"/>
                             <path x-show="!playing" d="M10 8l6 4-6 4V8z"/>
                             <path x-show="playing" d="M9 9h2v6H9zM13 9h2v6h-2z"/>
                         </svg>
-                        <span x-text="playing ? 'Playing now' : 'Set as playing now'"></span>
+                        <span class="flex flex-col gap-[2px]">
+                            <span x-text="playing ? 'Playing now' : 'Set as playing now'"></span>
+                            <span class="text-[12px] font-normal"
+                                  :class="playing ? 'opacity-75' : 'text-muted'"
+                                  x-text="playing ? 'Shown on your profile' : 'Your one active game'"></span>
+                        </span>
                     </button>
 
                     {{-- Add to favorites --}}
                     <button type="button"
                             @click="toggle('favorite')"
                             :disabled="loading === 'favorite' || (!favorite && favoriteCount >= 5)"
-                            class="h-11 lg:h-12 px-5 flex items-center justify-center gap-2 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-40"
+                            class="px-5 py-3 flex items-center gap-3 rounded-[12px] font-semibold text-[14px] cursor-pointer border transition-colors disabled:opacity-40 text-left"
                             :class="favorite
                                 ? 'bg-surface-2 text-text border-line'
                                 : 'bg-surface border-line text-text hover:bg-surface-2'">
-                        <svg width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                        <svg class="flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
                              :fill="favorite ? 'currentColor' : 'none'">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                         </svg>
-                        <span x-text="favoriteLabel"></span>
+                        <span class="flex flex-col gap-[2px]">
+                            <span x-text="favoriteLabel"></span>
+                            <span class="text-[12px] font-normal text-muted"
+                                  x-text="!favorite && favoriteCount >= 5 ? 'Remove a favorite first' : 'Your top 5 on your profile'"></span>
+                        </span>
                     </button>
 
                 </div>
-
-                {{-- Hint when favorites full --}}
-                <p x-show="!favorite && favoriteCount >= 5"
-                   class="m-0 text-[13px] text-muted">
-                    Favorites full — remove one from your profile to add this game.
-                </p>
 
             </div>
         </div>
