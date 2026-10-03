@@ -143,8 +143,6 @@ class DatabaseSeeder extends Seeder
 
         $users = [];
         foreach ($rows as $row) {
-            $currentGame = $games->get($row['currently_playing']);
-
             $user = User::create([
                 'psn_id'               => $row['psn_id'],
                 'bio'                  => $row['bio'] ?? null,
@@ -153,12 +151,13 @@ class DatabaseSeeder extends Seeder
                 'accepts_all_requests' => $row['accepts_all_requests'],
                 'verified'             => $row['verified'],
                 'last_active_at'       => Carbon::now()->subMinutes($row['last_active_minutes_ago']),
-                'current_game_id'      => $currentGame?->id,
             ]);
 
             $user->languages()->attach(
                 collect($row['languages'])->map(fn($n) => $languages[$n]->id)->all()
             );
+
+            $currentKey = $row['currently_playing'];
 
             $pivot = [];
             foreach ($row['played'] as $key => $hours) {
@@ -166,13 +165,28 @@ class DatabaseSeeder extends Seeder
                 if (! $game) {
                     continue;
                 }
-                $favoriteIndex = array_search($key, $row['favorites']);
+                $favoriteIndex = array_search($key, $row['favorites'] ?? []);
                 $pivot[$game->id] = [
                     'hours'             => $hours,
+                    'is_playing'        => $key === $currentKey,
+                    'is_played'         => true,
                     'is_favorite'       => $favoriteIndex !== false,
                     'favorite_position' => $favoriteIndex !== false ? $favoriteIndex + 1 : null,
                 ];
             }
+
+            // currently_playing game may not be in the played list
+            $currentGame = $games->get($currentKey);
+            if ($currentGame && ! isset($pivot[$currentGame->id])) {
+                $pivot[$currentGame->id] = [
+                    'hours'             => 0,
+                    'is_playing'        => true,
+                    'is_played'         => false,
+                    'is_favorite'       => false,
+                    'favorite_position' => null,
+                ];
+            }
+
             $user->games()->attach($pivot);
 
             $users[$row['psn_id']] = $user;
