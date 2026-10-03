@@ -1,8 +1,7 @@
 <x-layouts.app title="Feed — Green Dot">
 
-<script>
-window.__feedData = {
-    posts: @json($posts->map(fn($post) => [
+@php
+    $feedPosts = $posts->map(fn($post) => [
         'id'         => $post->id,
         'caption'    => $post->caption,
         'type'       => $post->type->value,
@@ -21,9 +20,13 @@ window.__feedData = {
             'placeholder_color_2' => $post->game->placeholder_color_2,
         ] : null,
         'reactions' => [],
-    ])->values()),
-    urlStore:  '{{ route('posts.store') }}',
-    urlSearch: '{{ route('games.search') }}',
+    ])->values();
+@endphp
+<script>
+window.__feedData = {
+    posts:     @json($feedPosts),
+    urlStore:  @json(route('posts.store')),
+    urlSearch: @json(route('games.search')),
 };
 </script>
 
