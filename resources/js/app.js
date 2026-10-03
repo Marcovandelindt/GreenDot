@@ -1,5 +1,45 @@
 import Alpine from 'alpinejs';
 
+Alpine.data('gameDetail', () => {
+    const { playing, favorite, favoriteCount, urlPlaying, urlFavorite } = window.__gameDetailData || {};
+
+    return {
+        playing:       !!playing,
+        favorite:      !!favorite,
+        favoriteCount: favoriteCount || 0,
+        loading:       null,
+
+        get favoriteLabel() {
+            if (this.favorite) return 'In favorites';
+            if (this.favoriteCount >= 5) return 'Favorites full';
+            return 'Add to favorites (' + this.favoriteCount + '/5)';
+        },
+
+        async toggle(type) {
+            this.loading = type;
+            try {
+                const url = type === 'playing' ? urlPlaying : urlFavorite;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                    },
+                });
+                const data = await res.json();
+                if (type === 'playing') {
+                    this.playing = data.active;
+                } else {
+                    this.favorite      = data.active;
+                    this.favoriteCount = data.count;
+                }
+            } finally {
+                this.loading = null;
+            }
+        },
+    };
+});
+
 Alpine.data('discoverPage', () => {
     const players = window.__discoverData || [];
 

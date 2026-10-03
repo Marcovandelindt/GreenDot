@@ -1,15 +1,14 @@
 <x-layouts.app title="{{ $game->title }} — Green Dot">
-@php
-    $gameInit = [
-        'playing'       => $isPlaying,
-        'favorite'      => $isFavorite,
-        'favoriteCount' => $favoriteCount,
-        'urlPlaying'    => route('profile.games.playing', $game),
-        'urlFavorite'   => route('profile.games.favorite', $game),
-    ];
-@endphp
-<div x-data="gameDetail(@json($gameInit))"
-     x-init="init()">
+<script>
+window.__gameDetailData = {
+    playing:       @json($isPlaying),
+    favorite:      @json($isFavorite),
+    favoriteCount: @json($favoriteCount),
+    urlPlaying:    @json(route('profile.games.playing', $game)),
+    urlFavorite:   @json(route('profile.games.favorite', $game)),
+};
+</script>
+<div x-data="gameDetail">
 
     {{-- ─── Hero ───────────────────────────────────────────────────────────── --}}
     <section class="px-4 lg:px-16 pt-7 pb-6 lg:pt-14 lg:pb-10">
@@ -152,45 +151,5 @@
 
 </div>
 
-<script>
-function gameDetail({ playing, favorite, favoriteCount, urlPlaying, urlFavorite }) {
-    return {
-        playing,
-        favorite,
-        favoriteCount,
-        loading: null,
 
-        get favoriteLabel() {
-            if (this.favorite) return 'In favorites';
-            if (this.favoriteCount >= 5) return 'Favorites full';
-            return 'Add to favorites (' + this.favoriteCount + '/5)';
-        },
-
-        init() {},
-
-        async toggle(type) {
-            this.loading = type;
-            try {
-                const url = type === 'playing' ? urlPlaying : urlFavorite;
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                    },
-                });
-                const data = await res.json();
-                if (type === 'playing') {
-                    this.playing = data.active;
-                } else {
-                    this.favorite      = data.active;
-                    this.favoriteCount = data.count;
-                }
-            } finally {
-                this.loading = null;
-            }
-        },
-    };
-}
-</script>
 </x-layouts.app>
