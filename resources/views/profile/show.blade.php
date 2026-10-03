@@ -1,5 +1,5 @@
 <x-layouts.app title="{{ $user->psn_id }} — Green Dot">
-<div x-data="{ copied: false }">
+<div x-data="{ copied: false, psnId: @json($user->psn_id) }">
 
     {{-- ─── Hero ───────────────────────────────────────────────────────────── --}}
     <section class="px-4 lg:px-16 pt-7 pb-6 lg:pt-14 lg:pb-10">
@@ -68,7 +68,7 @@
             <div class="flex gap-2 lg:flex-col lg:flex-shrink-0 lg:pt-1">
                 @if(auth()->id() !== $user->id)
                     <button type="button"
-                            @click="navigator.clipboard.writeText(@json($user->psn_id)).catch(() => {}); copied = true; setTimeout(() => copied = false, 3000)"
+                            @click="navigator.clipboard.writeText(psnId).catch(() => {}); copied = true; setTimeout(() => copied = false, 3000)"
                             class="flex-grow lg:flex-grow-0 lg:w-[200px] h-11 flex items-center justify-center gap-2 rounded-[12px] bg-green text-green-ink font-semibold text-[14px] cursor-pointer border-0"
                             style="box-shadow: 0 8px 22px rgba(61,226,127,.22)">
                         <svg x-show="!copied" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
