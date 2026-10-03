@@ -73,6 +73,7 @@ class IgdbImportCommand extends Command
                     'title'                => $title,
                     'short_title'          => null,
                     'slug'                 => $this->uniqueSlug($title, $game['id']),
+                    'summary'              => $game['summary'] ?? null,
                     'cover_url'            => $coverUrl,
                     'placeholder_color_1'  => null,
                     'placeholder_color_2'  => null,
@@ -86,7 +87,7 @@ class IgdbImportCommand extends Command
                 Game::upsert(
                     $rows,
                     uniqueBy: ['slug'],
-                    update:   ['external_id', 'title', 'cover_url', 'release_year', 'updated_at'],
+                    update:   ['external_id', 'title', 'summary', 'cover_url', 'release_year', 'updated_at'],
                 );
                 $imported += count($rows);
             }
@@ -128,7 +129,7 @@ class IgdbImportCommand extends Command
         $limit     = $pageSize;
 
         $query = <<<APICALYPSE
-            fields id,name,slug,first_release_date,cover.image_id,total_rating_count;
+            fields id,name,slug,summary,first_release_date,cover.image_id,total_rating_count;
             where platforms = ({$platforms})
               & total_rating_count >= {$minRatings};
             sort total_rating_count desc;

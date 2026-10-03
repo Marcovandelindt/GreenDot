@@ -88,6 +88,13 @@
         </div>
     </section>
 
+    {{-- ─── Summary ─────────────────────────────────────────────────────────── --}}
+    @if($game->summary)
+        <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line">
+            <p class="m-0 text-[15px] lg:text-[16px] leading-relaxed text-muted max-w-[720px]">{{ $game->summary }}</p>
+        </section>
+    @endif
+
     {{-- ─── Players ─────────────────────────────────────────────────────────── --}}
     @if($players->isNotEmpty())
         <section class="px-4 lg:px-16 py-5 lg:py-6 border-t border-line" aria-label="Players">
